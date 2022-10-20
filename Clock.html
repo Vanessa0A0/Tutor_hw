@@ -9,7 +9,7 @@
 <button id="changeButton" style="position:absolute;left: 10%;top:8vw;">Change Mode</button>
 <button id="startButton" onmousedown="holdDown()" onmouseup="holdUp()" style="position:absolute;left: 10%;top:6vw;">Start</button>
 
-<audio id="soundtrack" autoplay loop style="display:none">
+<audio id="soundtrack" style="display:none">
 <source src="soundtrack\alert.mp3" type='audio/mp3'>
 </audio>
 
@@ -23,7 +23,7 @@ var turn = false;
 var circle,pin;
 var power = false;
 var powerChange = true;
-var run, soundTrack, soundVal=1.0, sign=1.0;
+var run, soundTrack;
 
 init();
 render();
