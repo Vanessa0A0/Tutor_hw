@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+
+<head></head>
+<body> 
+<h1 style="position:absolute;left: 10%;top:0vw;"> I3B29 Clock</h1>
+<p style="position:absolute;left: 10%;top:3vw;">長按pause來reset</p>
+<button id="addButton" style="position:absolute;left: 10%;top:10vw;">+10</button>
+<button id="changeButton" style="position:absolute;left: 10%;top:8vw;">Change Mode</button>
+<button id="startButton" onmousedown="holdDown()" onmouseup="holdUp()" style="position:absolute;left: 10%;top:6vw;">Start</button>
+
+<audio id="soundtrack" autoplay loop style="display:none">
+<source src="soundtrack\alert.mp3" type='audio/mp3'>
+</audio>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://threejs.org/build/three.min.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script>
+var renderer, scene, camera;
+var angle = 0; 
+var turn = false;
+var circle,pin;
+var power = false;
+var powerChange = true;
+var run, soundTrack, soundVal=1.0, sign=1.0;
+
+init();
+//animate();
+render();
+
+$('#addButton').click(function() {
+	angle += (2 * Math.PI) / 6;
+	pin.rotation.z = angle;
+	
+});
+
+$('#changeButton').click(function() {
+	powerChange = !powerChange;
+	if(run)
+		clearTimeout(run);
+	if(powerChange === true)
+		toggle(power);
+	else
+		animate(power);
+});
+
+function init() {
+
+  renderer = new THREE.WebGLRenderer();
+  document.body.appendChild(renderer.domElement);
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  renderer.setClearColor(0x888888);
+
+  scene = new THREE.Scene();
+
+
+  camera = new THREE.PerspectiveCamera(35, width / height, 1, 100);
+  camera.position.y = 16;
+  camera.position.z = 40;
+  camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+  let controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+  window.addEventListener('resize', onWindowResize, false);
+	soundTrack = document.getElementById('soundtrack');
+  ///////////////////////////////////////////////////////////////
+  
+  let geometry = new THREE.CircleGeometry( 10, 128, 0, 2*Math.PI);
+	let material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
+	circle = new THREE.Mesh( geometry, material );
+	scene.add(circle);
+	
+	
+	geometry = new THREE.BufferGeometry();
+	var indices = [];
+	var vertices = [];
+	var colors = [];
+
+	vertices.push(-0.2,0,0.5, 0.2,0,0.5, 0.2,8.5,0.5, -0.2,8.5,0.5);
+	indices.push(0,1,2, 2,3,0);
+               
+	colors.push (1,0,0, 1,1,1, 0,1,0, 0,0,1);
+	
+  
+	geometry.setIndex(indices);
+	geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+	geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+	geometry.computeVertexNormals();
+	material = new THREE.MeshBasicMaterial({
+    color: 'blue',
+    vertexColors: true,
+    side: THREE.FrontSide
+  });
+  pin = new THREE.Mesh(geometry, material);
+  scene.add(pin);
+}
+
+function onWindowResize() {
+
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+  renderer.setSize(width, height);
+
+}
+
+function animate(power) {
+	
+	
+	
+	if (power === true){
+	render();
+	angle += (2 * Math.PI)/60;
+	pin.rotation.z = angle;
+	run = setTimeout(function(){if(angle.toFixed(3) >= (2*Math.PI).toFixed(3)){
+									angle = 0;
+									pin.rotation.z = angle;
+									clearTimeout(run);
+									soundTrack.play();
+									$('#startButton').text("start");
+									powerChange = true;
+									power = true;
+									render();}
+								else{animate(power);}}, 1000); 
+	}
+}
+
+function render() {
+  renderer.render(scene, camera);
+}
+
+function toggle(power) {
+
+	//soundTrack.volume = 100;
+	if (power === true){
+		render();
+		angle += (2 * Math.PI)/600;
+		pin.rotation.z = angle;
+		run = setTimeout(function(){if(angle.toFixed(3) >= (2*Math.PI).toFixed(3)){
+										angle = 0;
+										pin.rotation.z = angle;
+										clearTimeout(run);
+										soundTrack.play();
+										$('#startButton').text("start");
+										powerChange = true;
+										power = true;
+										render();}
+									else{toggle(power);}}, 93); 
+	}
+}
+
+function getTimeNow() {
+        var now = new Date();
+        return now.getTime();
+    }
+
+function holdDown() {
+	
+    timeStart = getTimeNow();
+    time = setInterval(function () {
+		timeEnd = getTimeNow();
+		if (timeEnd - timeStart > 1000) {clearInterval(time); 
+										angle=0; 
+										pin.rotation.z = angle; 
+										$('#startButton').text("start");
+										powerChange = true;
+										power = true;
+										render();}}, 100);
+
+}
+function holdUp() {
+	
+	clearInterval(time);
+	//powerChange = !powerChange;
+	power = !power;
+	if(angle === 0 && power === false)
+		soundTrack.pause();
+	
+	if(power === true){
+		$('#startButton').text("pause");
+		
+	}else{
+		$('#startButton').text("start");
+	}	
+	if(run)
+		clearTimeout(run);
+	if(powerChange === true)
+		toggle(power);
+	else
+		animate(power);
+}
+
+	
+</script>
+</body>
+</html>
