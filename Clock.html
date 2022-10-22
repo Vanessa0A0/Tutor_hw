@@ -3,11 +3,11 @@
 
 <head></head>
 <body> 
-<h1 style="position:absolute;left: 10%;top:0vw;"> I3B29 Clock</h1>
-<p style="position:absolute;left: 10%;top:3vw;">長按pause來reset</p>
-<button id="addButton" style="position:absolute;left: 10%;top:10vw;">+10</button>
-<button id="changeButton" style="position:absolute;left: 10%;top:8vw;">Change Mode</button>
-<button id="startButton" onmousedown="holdDown()" onmouseup="holdUp()" style="position:absolute;left: 10%;top:6vw;">Start</button>
+<h1 style="position:absolute;left: 10%;top:0vw;"> I3B29 1Min Timer</h1>
+<p style="position:absolute;left: 10%;top:3vw;">長按start來reset，restart後重製mode<br>時間到後按start可關閉鈴聲，再按一次開始倒計時</p>
+<button id="addButton" style="position:absolute;left: 10%;top:12vw;">+10</button>
+<button id="changeButton" style="position:absolute;left: 10%;top:10vw;">Change Mode</button>
+<button id="startButton" onmousedown="holdDown()" onmouseup="holdUp()" style="position:absolute;left: 10%;top:8vw;">Start</button>
 
 <audio id="soundtrack" style="display:none">
 <source src="soundtrack\alert.mp3" type='audio/mp3'>
@@ -20,14 +20,13 @@
 var renderer, scene, camera;
 var angle = 0; 
 var turn = false;
-var circle,pin;
+var pin;
 var power = false;
 var powerChange = true;
 var run, soundTrack;
 
 init();
 render();
-
 $('#addButton').click(function() {
 	angle += (2 * Math.PI) / 6;
 	pin.rotation.z = angle;
@@ -45,57 +44,167 @@ $('#changeButton').click(function() {
 });
 
 function init() {
-
   renderer = new THREE.WebGLRenderer();
   document.body.appendChild(renderer.domElement);
   var width = window.innerWidth;
   var height = window.innerHeight;
   renderer.setSize(window.innerWidth, window.innerHeight);
-
-  renderer.setClearColor(0x888888);
+  //renderer.setClearColor(0xdeced3);
+  //renderer.setClearColor(0xded5ce);
+  renderer.setClearColor(0xf2e7df);
 
   scene = new THREE.Scene();
 
-
   camera = new THREE.PerspectiveCamera(35, width / height, 1, 100);
+  /*
   camera.position.y = 16;
   camera.position.z = 40;
+  */
+  camera.position.set(0,0,50) ;
   camera.lookAt(new THREE.Vector3(0, 0, 0));
 
   let controls = new THREE.OrbitControls(camera, renderer.domElement);
 
   window.addEventListener('resize', onWindowResize, false);
 	soundTrack = document.getElementById('soundtrack');
-  ///////////////////////////////////////////////////////////////
-  
-  let geometry = new THREE.CircleGeometry( 10, 128, 0, 2*Math.PI);
-	let material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
-	circle = new THREE.Mesh( geometry, material );
-	scene.add(circle);
+/////////////////////////////////////////////////////////////// 
+///鐘
+	let geometry = new THREE.TorusGeometry( 6.5, 0.2, 4, 100);
+	let material = new THREE.MeshBasicMaterial( { color: 0x000000, side: THREE.DoubleSide } );
+	let innerClock = new THREE.Mesh( geometry, material );
+	scene.add(innerClock);
 	
+	geometry = new THREE.TorusGeometry( 10.5, 0.2, 4, 100);
+	material = new THREE.MeshBasicMaterial( { color: 0x000000, side: THREE.DoubleSide } );
+	let outerClock = new THREE.Mesh( geometry, material );
+	scene.add(outerClock);
+
+///	分
+	geometry = new THREE.PlaneGeometry( 4, 0.5 );
+	material = new THREE.MeshBasicMaterial( {color: 0x000000, side: THREE.DoubleSide} );
+	numberI = new THREE.Mesh( geometry, material );
+	numberI.position.set(4.4,7.3,0);
+	numberI.rotation.z = 1.05;
 	
+	numberI_2 = numberI.clone();
+	numberI_2.position.set(7.3,4,0);
+	numberI_2.rotation.z = 0.5;
+	
+	numberI_3 = numberI.clone();
+	numberI_3.position.set(7.2,-4.2,0);
+	numberI_3.rotation.z = -0.5;
+	
+	numberI_4 = numberI.clone();
+	numberI_4.position.set(4.3,-7.5,0);
+	numberI_4.rotation.z = -1.05;
+	
+	numberI_5 = numberI.clone();
+	numberI_5.position.set(-4.3,-7.5,0);
+	numberI_5.rotation.z = 1.05;
+	
+	numberI_6 = numberI.clone();
+	numberI_6.position.set(-7.2,-4.2,0);
+	numberI_6.rotation.z = 0.5;
+	
+	numberI_7 = numberI.clone();
+	numberI_7.position.set(-7.3,4,0);
+	numberI_7.rotation.z = -0.5;
+	
+	numberI_8 = numberI.clone();
+	numberI_8.position.set(-4.4,7.3,0);
+	numberI_8.rotation.z = -1.05;
+	scene.add(numberI, numberI_2, numberI_3, numberI_4, numberI_5, numberI_6, numberI_7, numberI_8);
+/////////////////////////////////////////////////	
+	numberIII_2 = numberI.clone();
+	numberIII_2.position.set(8.5,0,0);
+	numberIII_2.rotation.z = 0;
+	
+	numberIII_1 = numberIII_2.clone();
+	numberIII_1.position.set(8.5,1,0);
+	numberIII_1.rotation.z = 0.08;
+	
+	numberIII_3 = numberIII_2.clone();
+	numberIII_3.position.set(8.5,-1,0);
+	numberIII_3.rotation.z = -0.08;
+	
+	scene.add(numberIII_1, numberIII_2, numberIII_3);
+///
+	numberVI_1 = numberI.clone();
+	numberVI_1.position.set(0,-8.5,0);
+	numberVI_1.rotation.z = 1.3;
+	
+	numberVI_2 = numberI.clone();
+	numberVI_2.position.set(1.1,-8.5,0);
+	numberVI_2.rotation.z = -1.3;
+	
+	numberVI_3 = numberI.clone();
+	numberVI_3.position.set(-0.9,-8.5,0);
+	numberVI_3.rotation.z = 1.5;
+	
+	scene.add(numberVI_1, numberVI_2, numberVI_3);
+///	
+	let groupX = new THREE.Group();
+	geometry = new THREE.PlaneGeometry( 4.3, 0.5 );
+	material = new THREE.MeshBasicMaterial( {color: 0x000000, side: THREE.DoubleSide} );
+	numberX_1 = new THREE.Mesh( geometry, material );
+	numberX_1.rotation.z = 1.15;
+	
+	numberX_2 = numberX_1.clone();
+	numberX_2.rotation.z = -1.15;
+	
+	numberIX_1 = numberI.clone();
+	numberIX_1.position.set(-8.5,-0.7,0);
+	numberIX_1.rotation.z = 0;
+	
+	groupX.add(numberX_1, numberX_2);
+	numberXII_X = groupX.clone();
+	groupX.position.set(-8.4,0.6,0);
+	groupX.rotation.z = 1.5;
+	scene.add(groupX, numberIX_1);
+///	
+	numberXII_X.position.set(-0.9,8.4,0);
+	numberXII_X.rotation.z = 0.1;
+	
+	numberXII_1 = numberI.clone();
+	numberXII_1.position.set(0.5,8.4,0);
+	numberXII_1.rotation.z = 1.5;
+	
+	numberXII_2 = numberXII_1.clone();
+	numberXII_2.position.set(1.5,8.4,0);
+	scene.add(numberXII_X, numberXII_1, numberXII_2);
+///
+///指針	
 	geometry = new THREE.BufferGeometry();
 	var indices = [];
 	var vertices = [];
 	var colors = [];
-
-	vertices.push(-0.2,0,0.5, 0.2,0,0.5, 0.2,8.5,0.5, -0.2,8.5,0.5);
+/*
+	vertices.push(-0.2,-1,0.7, 0.2,-1,0.7, 0.2,8.5,0.7, -0.2,8.5,0.7);
 	indices.push(0,1,2, 2,3,0);
                
 	colors.push (1,0,0, 1,1,1, 0,1,0, 0,0,1);
+*/	
+	//*5
+	vertices.push(0,8.5,0.5, -0.25,7,0.5, -0.7,5.5,0.5, -0.25,4.7,0.5, 
+				  0,6.3,0.5, -0.3,5.5,0.5, 0,5,0.5, 0.3,5.5,0.5,
+				  0.25,7,0.5, 0.7,5.5,0.5, 0.25,4.7,0.5,
+				  0.2,0.5,0.5, 0.5,0,0.5, 0,-0.9,0.5, -0.5,0,0.5, -0.2,0.5,0.5);
+				  
+	indices.push(0,4,1, 1,4,2, 2,5,4, 2,5,3, 3,6,5, 
+				 0,4,8, 8,4,9, 4,7,9, 9,7,10, 10,6,7,
+				 10,6,11, 6,11,13, 11,12,13, 13,15,6, 15,14,13, 6,3,15);
 	
-  
 	geometry.setIndex(indices);
 	geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-	geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
 	geometry.computeVertexNormals();
 	material = new THREE.MeshBasicMaterial({
-    color: 'blue',
+    color: 'black',
     vertexColors: true,
-    side: THREE.FrontSide
+    side: THREE.DoubleSide
   });
   pin = new THREE.Mesh(geometry, material);
   scene.add(pin);
+  
 }
 
 function onWindowResize() {
