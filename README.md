@@ -8,7 +8,7 @@
 
 -1️⃣ [Train](#train) ✅
 
--2️⃣ [1 Min Timer](#1mintimer)✅
+-2️⃣ [1 Min Timer](#1-min-timer)✅
 
 
 
