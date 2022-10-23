@@ -225,7 +225,7 @@ function animate(power) {
 	render();
 	angle += (2 * Math.PI)/60;
 	pin.rotation.z = angle;
-	run = setTimeout(function(){if(angle.toFixed(3) >= (2*Math.PI).toFixed(3)){
+	run = setTimeout(function(){if(angle >= (2*Math.PI)){
 									angle = 0;
 									pin.rotation.z = angle;
 									clearTimeout(run);
@@ -248,7 +248,7 @@ function toggle(power) {
 		render();
 		angle += (2 * Math.PI)/600;
 		pin.rotation.z = angle;
-		run = setTimeout(function(){if(angle.toFixed(3) >= (2*Math.PI).toFixed(3)){
+		run = setTimeout(function(){if(angle >= (2*Math.PI)){
 										angle = 0;
 										pin.rotation.z = angle;
 										clearTimeout(run);
