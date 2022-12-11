@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+	
+#info {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  color: #ffff00
+}
+
+body {
+  overflow: hidden;
+}
+
+
+</style>
+</head>
+<div id="info">I3B29 Keyframe</div>
+<body>
+<script type="module">
+
+//import * as THREE from 'https://cdn.skypack.dev/three@0.136';
+import * as THREE from "https://threejs.org/build/three.module.js"; 
+//import {OrbitControls} from 'https://cdn.skypack.dev/three@0.136/examples/jsm/controls/OrbitControls.js';
+import {init, animate} from "./keyFrame_init.js";
+
+init();
+animate();
+
+</script>
+</body>
+
+</html>
