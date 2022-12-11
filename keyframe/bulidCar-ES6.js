@@ -1,5 +1,4 @@
 import * as THREE from "https://threejs.org/build/three.module.js";
-//import {scene} from "./keyframe init.js";
 
 export function bulidCar(){
   var car = new THREE.Group();
