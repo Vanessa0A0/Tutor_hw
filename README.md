@@ -12,6 +12,7 @@
 
 -3️⃣ [Keyframe Modules](#Keyframe-Modules)✅
 
+-4️⃣ [min3](#min3)✅
 
 
 
@@ -25,5 +26,9 @@
 
 ### Keyframe Modules
 	E6 Modules
+
+### min3
+	MeshText2D, SpriteText2D自由發揮
+
 
 
